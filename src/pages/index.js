@@ -1,5 +1,4 @@
-import { Button, Box, Flex } from 'theme-ui'
-import { useState, useEffect } from 'react'
+import { Box, Flex } from 'theme-ui'
 import { withApollo } from '../apollo/client'
 import EpochsTable from '../components/EpochsTable'
 

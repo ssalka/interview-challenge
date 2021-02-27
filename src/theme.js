@@ -65,6 +65,7 @@ const globalTheme = {
       bg: 'transparent',
       border: '1px solid white',
       fontWeight: 'bold',
+      outline: 'none',
       '&:hover': {
         boxShadow: '0 0 16px 0 rgba(255, 255, 255, 0.3)',
       },
