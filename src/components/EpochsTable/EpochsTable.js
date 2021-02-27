@@ -17,14 +17,15 @@ const EpochsTable = (props) => {
     variables: {
       first: PAGE_SIZE,
     },
-  })
+  });
   // separate destructuring because destructuring `fetchMore` off of res causes runtime error
   const { loading, data, error } = res
 
   const handleLoadMore = useCallback(() => {
     res.fetchMore({
-      first: PAGE_SIZE,
-      skip: data.epoches.length,
+      variables: {
+        skip: epochs.length,
+      },
       updateQuery(prev, { fetchMoreResult }) {
         if (!fetchMoreResult) {
           setHasNextPage(false)
