@@ -27,7 +27,7 @@ const Layout = ({ children, page }) => {
             margin: 0;
             padding: 0;
             overflow-x: hidden !important;
-            background-image: url("./images/Background.jpg");
+            background-image: url("./images/Background@2x.jpg");
             background-repeat: no-repeat;
             background-size: auto;
           }

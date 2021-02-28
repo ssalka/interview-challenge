@@ -63,13 +63,22 @@ const globalTheme = {
     flat: {
       color: 'white',
       bg: 'transparent',
-      border: '1px solid white',
+      border: '1px solid rgba(111, 76, 255, 0.2)',
       fontWeight: 'bold',
       outline: 'none',
+      padding: '16px 32px',
       '&:hover': {
-        boxShadow: '0 0 16px 0 rgba(255, 255, 255, 0.3)',
+        boxShadow: '0 0 16px 0 rgba(255, 255, 255, 0.2)',
       },
     },
+    fab: {
+      borderRadius: '50%',
+      bg: 'rgba(111, 76, 255, 0.16)',
+      '&:hover': {
+        bg: 'rgba(111, 76, 255, 0.88)'
+      },
+      minWidth: 'fit-content',
+    }
   },
 }
 

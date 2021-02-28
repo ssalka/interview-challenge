@@ -9,9 +9,7 @@ import EpochRow from './EpochRow';
 
 const PAGE_SIZE = 3;
 
-const TABLE_HEADERS = ['id', 'startBlock', 'endBlock', 'queryFees', 'totalRewards'].map(
-  field => _.words(field).join(' ')
-);
+const TABLE_HEADERS = ['id', 'startBlock', 'endBlock', 'queryFees', 'totalRewards'];
 
 function bigIntToNumber(bigIntString) {
   const bigInt = BigInt(bigIntString);
@@ -59,7 +57,7 @@ const EpochsTable = (props) => {
           epoches: prev.epoches.concat(fetchMoreResult.epoches),
         }
       },
-    })
+    });
   }, [epochs]);
 
   return (
@@ -71,7 +69,8 @@ const EpochsTable = (props) => {
             {epochs.map(epoch =>
               <EpochRow
                 key={epoch.id}
-                epoch={epoch}
+                data={epoch}
+                fields={TABLE_HEADERS}
                 sortField={sortField}
               />
             )}
@@ -81,8 +80,11 @@ const EpochsTable = (props) => {
       {/*
         REVIEW: how to get full count without pulling in all data?
         Or, is necessary to load all data up-front and only paginate on frontend? :grimacing:
+        TODO: separate query that only fetches ID, but gets all of them for full count
       */}
-      {epochs.length} of 94
+      <div className="row-count">
+        {epochs.length} of 94
+      </div>
       {hasNextPage && (
         <Button variant="flat" className="btn-load-more" onClick={handleLoadMore}>
           Load More
@@ -94,12 +96,20 @@ const EpochsTable = (props) => {
             width: 100%;
             overflow-x: auto;
           }
+
+          .row-count {
+            margin: 16px 0;
+            text-align: left;
+            font-size: 12px;
+            color: white;
+            opacity: 0.48;
+          }
         `}
       </style>
       <style jsx global>
         {`
           .btn-load-more {
-            margin-top: 40px;
+            margin-top: 40px !important;
           }
 
           .table-header, .epoch-row {
@@ -111,6 +121,11 @@ const EpochsTable = (props) => {
           .col {
             min-width: 258px;
             height: 46px;
+          }
+
+          :global(.smol-text) {
+            text-transform: uppercase;
+            font-size: 10px;
           }
        `}
       </style>
