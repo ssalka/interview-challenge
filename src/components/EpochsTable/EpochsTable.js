@@ -1,69 +1,72 @@
-import _ from 'lodash';
-import React, { useCallback, useMemo, useState } from 'react';
-import { Button } from 'theme-ui';
-import { useQuery } from '@apollo/react-hooks';
+import _ from 'lodash'
+import React, { useCallback, useMemo, useState } from 'react'
+import { Button } from 'theme-ui'
+import { useQuery } from '@apollo/react-hooks'
 
-import { EPOCHES_QUERY } from '../../apollo/queries';
-import TableHeaders from './TableHeaders';
-import EpochRow from './EpochRow';
+import { EPOCHES_QUERY } from '../../apollo/queries'
+import TableHeaders from './TableHeaders'
+import EpochRow from './EpochRow'
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 3
 
-const TABLE_HEADERS = ['id', 'startBlock', 'endBlock', 'queryFees', 'totalRewards'];
+const TABLE_HEADERS = ['id', 'startBlock', 'endBlock', 'queryFees', 'totalRewards']
 
 function bigIntToNumber(bigIntString) {
-  const bigInt = BigInt(bigIntString);
-  const value = Number(bigInt) / (10 ** 18);
+  const bigInt = BigInt(bigIntString)
+  const value = Number(bigInt) / 10 ** 18
 
-  return value;
+  return value
 }
 
 const EpochsTable = (props) => {
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const [sortField, setSortField] = useState(TABLE_HEADERS[0]);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [hasNextPage, setHasNextPage] = useState(true)
+  const [sortField, setSortField] = useState('startBlock')
+  const [sortOrder, setSortOrder] = useState('asc')
 
   const res = useQuery(EPOCHES_QUERY, {
     variables: {
       first: PAGE_SIZE,
+      orderBy: sortField,
     },
-  });
+  })
   // separate destructuring because destructuring `fetchMore` off of res causes runtime error
-  const { loading, data, error } = res;
+  const { loading, data, error } = res
 
   const epochs = useMemo(() => {
-    if (!data) return [];
+    if (!data) return []
 
-    return data.epoches.map(epoch => ({
+    return data.epoches.map((epoch) => ({
       ...epoch,
       queryFees: bigIntToNumber(epoch.queryFees),
       totalRewards: bigIntToNumber(epoch.totalRewards),
-    }));
-  }, [data?.epoches]);
+    }))
+  }, [data?.epoches])
 
-  const handleSort = useCallback(_orderBy => {
-    const orderDirection = _orderBy === sortField
-      ? (sortOrder === 'asc' ? 'desc' : 'asc')
-      : 'asc';
-    setSortField(_orderBy);
-    setSortOrder(orderDirection);
+  const handleSort = useCallback(
+    (_orderBy) => {
+      const orderDirection =
+        _orderBy === sortField ? (sortOrder === 'asc' ? 'desc' : 'asc') : 'asc'
+      setSortField(_orderBy)
+      setSortOrder(orderDirection)
 
-    // HACK maybe I shouldn't have aliased this field in the query?
-    const orderBy = _orderBy.replace('queryFees', 'queryFeeRebates');
+      // HACK maybe I shouldn't have aliased this field in the query?
+      const orderBy = _orderBy.replace('queryFees', 'queryFeeRebates')
 
-    res.fetchMore({
-      variables: {
-        orderBy,
-        orderDirection,
-        first: epochs.length,
-      },
-      updateQuery(prev, { fetchMoreResult }) {
-        return {
-          epoches: fetchMoreResult.epoches,
-        };
-      },
-    });
-  }, [epochs, sortField]);
+      res.fetchMore({
+        variables: {
+          orderBy,
+          orderDirection,
+          first: epochs.length,
+        },
+        updateQuery(prev, { fetchMoreResult }) {
+          return {
+            epoches: fetchMoreResult.epoches,
+          }
+        },
+      })
+    },
+    [epochs, sortField],
+  )
 
   const handleLoadMore = useCallback(() => {
     res.fetchMore({
@@ -80,8 +83,8 @@ const EpochsTable = (props) => {
           epoches: prev.epoches.concat(fetchMoreResult.epoches),
         }
       },
-    });
-  }, [epochs]);
+    })
+  }, [epochs])
 
   return (
     <>
@@ -94,14 +97,14 @@ const EpochsTable = (props) => {
               sortOrder={sortOrder}
               onSort={handleSort}
             />
-            {epochs.map(epoch =>
+            {epochs.map((epoch) => (
               <EpochRow
                 key={epoch.id}
                 data={epoch}
                 fields={TABLE_HEADERS}
                 sortField={sortField}
               />
-            )}
+            ))}
           </>
         )}
       </div>
@@ -110,9 +113,7 @@ const EpochsTable = (props) => {
         Or, is necessary to load all data up-front and only paginate on frontend? :grimacing:
         TODO: separate query that only fetches ID, but gets all of them for full count
       */}
-      <div className="row-count">
-        {epochs.length} of 94
-      </div>
+      <div className="row-count">{epochs.length} of 94</div>
       {hasNextPage && (
         <Button variant="flat" onClick={handleLoadMore}>
           Load More
@@ -136,7 +137,8 @@ const EpochsTable = (props) => {
       </style>
       <style jsx global>
         {`
-          .table-header, .epoch-row {
+          .table-header,
+          .epoch-row {
             display: flex;
             align-items: center;
             text-align: left;
@@ -154,10 +156,10 @@ const EpochsTable = (props) => {
             text-transform: uppercase;
             font-size: 10px;
           }
-       `}
+        `}
       </style>
     </>
   )
 }
 
-export default EpochsTable;
+export default EpochsTable
