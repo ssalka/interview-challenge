@@ -74,6 +74,7 @@ const globalTheme = {
     fab: {
       borderRadius: '50%',
       bg: 'rgba(111, 76, 255, 0.16)',
+      outline: 'none',
       '&:hover': {
         bg: 'rgba(111, 76, 255, 0.88)'
       },

@@ -22,11 +22,22 @@ const TableHeaders = ({ headers, sortField, sortOrder, onSort }) => {
             user-select: none;
           }
 
-          .col img {
-            margin-left: 8px;
-            width: 8px;
-            height: 8px;
+          .col {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            &:hover {
+              border-bottom: 1px solid rgba(255, 255, 255, 0.34);
+            }
+            &.active-sort-field {
+              border-bottom: 1px solid rgba(255, 255, 255, 0.88);
+            }
+
+            img {
+              margin-left: 8px;
+              width: 8px;
+              height: 8px;
+            }
           }
+
         `}
       </style>
     </div>

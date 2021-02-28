@@ -86,7 +86,7 @@ const EpochsTable = (props) => {
         {epochs.length} of 94
       </div>
       {hasNextPage && (
-        <Button variant="flat" className="btn-load-more" onClick={handleLoadMore}>
+        <Button variant="flat" onClick={handleLoadMore}>
           Load More
         </Button>
       )}
@@ -108,10 +108,6 @@ const EpochsTable = (props) => {
       </style>
       <style jsx global>
         {`
-          .btn-load-more {
-            margin-top: 40px !important;
-          }
-
           .table-header, .epoch-row {
             display: flex;
             align-items: center;
@@ -121,9 +117,12 @@ const EpochsTable = (props) => {
           .col {
             min-width: 258px;
             height: 46px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
           }
 
-          :global(.smol-text) {
+          .smol-text {
             text-transform: uppercase;
             font-size: 10px;
           }

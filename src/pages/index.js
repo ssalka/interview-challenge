@@ -16,12 +16,16 @@ const Index = () => {
         <h1>Indexers</h1>
         <div id="search-bar">
           <img src="./images/Search.svg" />
-          TODO: Search
+          Search
         </div>
       </Flex>
       <EpochsTable />
       <style jsx>
         {`
+          h1 {
+            margin-bottom: 0;
+          }
+
           /* FIXME: should use \`Flex\` component props, but they don't seem to be applying... */
           :global(.search-row) {
             gap: 16px;
@@ -31,6 +35,7 @@ const Index = () => {
           #search-bar {
             border-left: 1px solid #ccc;
             padding-left: 8px;
+            color: rgba(255, 255, 255, 0.64);
 
             img {
               margin-right: 4px;
