@@ -41,6 +41,29 @@ const EpochsTable = (props) => {
     }));
   }, [data?.epoches]);
 
+  const handleSort = useCallback(_orderBy => {
+    const orderDirection = _orderBy === sortField
+      ? (sortOrder === 'asc' ? 'desc' : 'asc')
+      : 'asc';
+    setSortField(_orderBy);
+    setSortOrder(orderDirection);
+
+    // HACK maybe I shouldn't have aliased this field in the query?
+    const orderBy = _orderBy.replace('queryFees', 'queryFeeRebates');
+
+    res.fetchMore({
+      variables: {
+        orderBy,
+        orderDirection,
+        first: epochs.length,
+      },
+      updateQuery(prev, { fetchMoreResult }) {
+        return {
+          epoches: fetchMoreResult.epoches,
+        };
+      },
+    });
+  }, [epochs, sortField]);
 
   const handleLoadMore = useCallback(() => {
     res.fetchMore({
@@ -65,7 +88,12 @@ const EpochsTable = (props) => {
       <div className="epochs-table">
         {!(loading || error) && (
           <>
-            <TableHeaders headers={TABLE_HEADERS} sortField={sortField} sortOrder={sortOrder} />
+            <TableHeaders
+              headers={TABLE_HEADERS}
+              sortField={sortField}
+              sortOrder={sortOrder}
+              onSort={handleSort}
+            />
             {epochs.map(epoch =>
               <EpochRow
                 key={epoch.id}
